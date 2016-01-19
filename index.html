@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+	<link href="style/style.css" rel="stylesheet">
+	<script src="front.js" type="text/javascript"></script>
+    <title>SQLite Manager</title>
+  </head>
+  <body>
+	<div id="topbar">
+		<div id = "topbar-contents">
+			<input type='file'  id="file" style="display:none">
+			<a class="inline-link">New DB</a>
+			<a class="inline-link" href="javascript:openDialog();">Open DB</a>
+		</div>
+		<div id = "topbar-popup">
+		</div>
+	</div>
+	<div id="body" onload="init()">
+		<div id="right-body">
+			<h1> Actions </h1>
+			<div id="actions">
+			<a href="javascript:createTable();">New table</a>
+			</div>
+		</div>
+		<div id="left-body">
+			<h1 id ="title">SQLite Electron Manager</h1>
+			<p id="contents">Welcome! You may either <a href="javascript:openDialog();">open a database</a> or <a>create a new one</a> from scratch.</p>
+			<div style="position:fixed; bottom:1px; width: 80vw; padding: 5px; border: 1px black solid;">
+				<p>Console </p>
+				<form style="border: 1px #aaa solid;">
+				<div id="log" style="overflow: scroll; height:20vh; width:100%; font-family:courier; padding-top:5px; overflow-x:hidden;" readonly></div>
+				<input id="querytext" type="text" placeholder="Type here" style="width:100%; border:none;">
+				<button type="submit" formaction = "javascript:executeQuery();" value="Execute" style="width:20%; display:none;">Execute</button>
+				</form>
+			</div>
+		</div>
+	</div>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<p>Table name:<br><input id = "tablename" type="text" placeholder="Name" style="width:100%;"></p>
+<p>Number of columns:<br><input type="number" value="0" id = "numcols" style="width:100%;"></p>
+<table id = "columns">
+</table>
+<a class="button" href="javascript:getCreateTableSQLQuery();">Get SQL query</a>
+<a class ="button" href="">Create table</a>
+
+<script>
+	$("#numcols").keyup(
+	function()
+	{
+		var contents = "<tr><th>Name</th><th>Type</th><th>Can be null?</th></tr>";
+		var n = $("#numcols").val();
+		for (i=0;i<n;i++)
+			contents += "<tr><td>" + "<input id=\"name" + i + "\">" + 
+								"</td><td>" + "<select id=\"type" + i + "\">" +
+								"<option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>" + 
+								"</td><td>" + "<input type='checkbox' id=\"type" + i + "\"></td>";
+		$("#columns").html(contents);
+	}
+	);
+	
+	$("#numcols").change(function(){$("#numcols").keyup();});
+	
+function getCreateTableSQLQuery()
+{
+	var numColumns = $("#numcols").val();
+	var query = "CREATE TABLE " + $("#tablename").val() + "(";
+	for (var i=0;i<numColumns;i++)
+	{
+		if ($("#name"+i).val() == "")
+		{
+			alert('Column ' + i + ' has no name specified!');
+			return;
+		}
+		query = query + $("#name" + i).val() +" "+ $("#type" + i).val() + ",";
+	}
+	query = query + ")";
+	alert(query);
+}
+</script>
