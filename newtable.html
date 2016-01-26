@@ -2,8 +2,8 @@
 <p>Number of columns:<br><input type="number" value="0" id = "numcols" style="width:100%;"></p>
 <table id = "columns">
 </table>
-<a class="button" href="javascript:getCreateTableSQLQuery();">Get SQL query</a>
-<a class ="button" href="">Create table</a>
+<a class="button" href="javascript:alert(getCreateTableSQLQuery());">Get SQL query</a>
+<a class ="button" href="javascript:executeQuery(getCreateTableSQLQuery())">Create table</a>
 
 <script>
 	$("#numcols").keyup(
@@ -36,6 +36,6 @@ function getCreateTableSQLQuery()
 		query = query + $("#name" + i).val() +" "+ $("#type" + i).val() + (($("#null" + i).is(":checked"))?" NULL":" NOT NULL") + ((i==numColumns-1?"":","));
 	}
 	query = query + ")";
-	alert(query);
+	return query;
 }
 </script>

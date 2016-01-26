@@ -134,14 +134,25 @@ function toggleConsole()
 	}
 }
 
-function executeQuery()
+function executeQuery(query)
 {
-	var query = $("#querytext").val();
-	log(out,"<b>" + query + "</b>");
+	if ($("#console-toggle-button").html()=="Show")
+		toggleConsole();
+	if (typeof query === "undefined")
+	{
 		$("#title").html("Console query result");
+		query = $("#querytext").val();
+	}
+	else
+		$("#title").html("Query result");
+	
+	log(out,"<b>" + query + "</b>");
 	var iteration = 0;
 	var contents;
 	var ok = 0;
+	
+	$("#contents").html('Query is running...');
+	
 	var processRow = function (err,row)
 	{
 		if (iteration==0)
