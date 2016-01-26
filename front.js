@@ -4,8 +4,8 @@ remote = require('remote');
 dialog = remote.require('dialog');
 require('jquery-ui');
 window.$ = window.jQuery = require('jquery');
-window.onload = 
-function init()
+
+window.onload = function init()
 {
 	out = $("#log");
 };
@@ -40,7 +40,7 @@ function listTables()
 			{
 				i++;
 				contents += "<tr><td>" + row.name + "</td><td>" + row.sql + "</td><td>" + 
-				"<a href=\"javascript:displayTable('" + row.name + "')\">Display</a>" +
+				"<a href=\"javascript:displayTable('" + row.name + "')\">Display</a> " +
 				"<a href=\"javascript:dropTable('" + row.name + "')\">Drop</a></td></tr>";
 			},
 			function()
@@ -107,6 +107,33 @@ function dropTable(name)
 	listTables();
 }
 
+function toggleConsole()
+{
+	var qtheight;
+	if (typeof(qtheight) === "undefined")
+		qtheight = $("#querytext").height() + "px";
+	
+	if ( $("#console-toggle-button").html() == "Hide")
+	{
+		$("#log").animate({height:"0px"},300);
+		$("#console-toggle-button").html("Show");
+		$("#querytext").hide("slide",{},300,function()
+			{
+				$("#querytext").hide();
+				$("#log").hide();
+			});
+	}
+	else
+	{
+		$("#querytext").show();
+		$("#log").show();
+		
+		$("#log").animate({height:"20vh"},300);
+		$("#console-toggle-button").html("Hide");
+		$("#querytext").animate({height:qtheight},300);
+	}
+}
+
 function executeQuery()
 {
 	var query = $("#querytext").val();
@@ -168,7 +195,7 @@ function openDialog()
 		});
 }
 
-function successMessage(message, timeout)
+function successMessage(message, timeout, endFunc)
 {
 	if (typeof timeout === 'undefined')
 		timeout = 3000;
@@ -181,6 +208,8 @@ function successMessage(message, timeout)
 	},300);
 	
 	setTimeout(function(){
+		if (typeof endFunc !== "undefined")
+			endFunc();
 		$("#topbar-contents").animate({height:"30px"},400);
 		$("#topbar").animate({
 		backgroundColor:initialColor
@@ -195,5 +224,5 @@ function openDB(fileName)
 		db.close();
 	db = new sqlite.Database(fileName);
 	listTables();
-	successMessage('Database opened successfully.');
+	successMessage('Database opened successfully.',3000,function(){$("#dbname").html(fileName);});
 }

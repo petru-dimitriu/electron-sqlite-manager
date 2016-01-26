@@ -15,7 +15,7 @@
 			contents += "<tr><td>" + "<input id=\"name" + i + "\">" + 
 								"</td><td>" + "<select id=\"type" + i + "\">" +
 								"<option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>" + 
-								"</td><td>" + "<input type='checkbox' id=\"type" + i + "\"></td>";
+								"</td><td>" + "<input type='checkbox' id=\"null" + i + "\"></td>";
 		$("#columns").html(contents);
 	}
 	);
@@ -33,7 +33,7 @@ function getCreateTableSQLQuery()
 			alert('Column ' + i + ' has no name specified!');
 			return;
 		}
-		query = query + $("#name" + i).val() +" "+ $("#type" + i).val() + ",";
+		query = query + $("#name" + i).val() +" "+ $("#type" + i).val() + (($("#null" + i).is(":checked"))?" NULL":" NOT NULL") + ((i==numColumns-1?"":","));
 	}
 	query = query + ")";
 	alert(query);

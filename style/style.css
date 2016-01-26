@@ -48,12 +48,11 @@ body, #menu-container
 
 #body h1
 {
-	margin: 5px 0px 10px 5px;
+	padding: 5px 0px 5px 5px;
+	margin: 0;
 	font-size: 150%;
 	font-family: PTSansBold;
-	border-bottom-style: solid;
-	border-bottom-color: #229AF0;
-	border-bottom-width: 1px;
+	background-color:#b3b3cc;
 	text-align:left;
 }
 
@@ -90,7 +89,7 @@ input
 
 #body p
 {
-	margin: 0px 0px 5px 5px;
+	margin: 0;
 	text-align:justify;
 }
 
@@ -140,15 +139,34 @@ td:nth-child(3n+0)
 	text-align:center;
 }
 
-.button, .blue-button
+.button, .blue-button, .big-button
 {
-	background-color: #44f;
+	background-color: #b3b3cc;
 	display:block;
 	padding: 5px;
 	color:white;
 	font-size:90%;
+	border: 1px #0a0a0f solid;
 	text-align:center;
-	margin:5px;
+}
+
+.big-button
+{
+	margin: 0 auto;
+	font-size: 130%;
+	color: black;
+	width:75%;
+}
+
+.big-button:hover
+{
+	background-color: #33334c;
+	color: white;
+}
+
+#console-toggle-button
+{
+	float: right;
 }
 
 #topbar
@@ -159,6 +177,12 @@ td:nth-child(3n+0)
 	height:30px;
 	margin-bottom: 10px;
 	overflow:hidden;
+}
+
+#contents
+{
+	background-color:#d1d1e1;
+	padding: 10px 0 10px 0;
 }
 
 #topbar-contents, #topbar-popup
