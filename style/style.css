@@ -26,6 +26,7 @@ body, #menu-container
 	float: left;
 	width: 75%;
 	padding: 5px;
+	overflow-x:auto;
 }
 
 #right-body
@@ -103,17 +104,26 @@ input
 	text-align:center;
 }
 
+table
+{
+	width: 100%;
+}
+
 table, th, td
 {
 	font-family:PTSans;
-	border: 1px solid #A4C5CE;;
+	border: 1px solid #A4C5CE;
 	border-collapse:collapse;
+	text-align:left;
+	word-wrap:break-word;
+	word-break:break-all;
 }
 
 th
 {
 	background-color:#888888;
 	color:white;
+	min-width:30px;
 }
 
 tr:hover
@@ -144,6 +154,7 @@ td:nth-child(3n+0)
 	background-color: #b3b3cc;
 	display:block;
 	padding: 5px;
+	margin: 5px 0 5px 0;
 	color:white;
 	font-size:90%;
 	border: 1px #0a0a0f solid;
@@ -162,6 +173,22 @@ td:nth-child(3n+0)
 {
 	background-color: #33334c;
 	color: white;
+}
+
+#console
+{
+	position:fixed;
+	bottom: 1px;
+	bottom: 1px;
+	right: 10vw;
+	padding: 5px;
+	border: 1px black solid;
+	background-color:#F0E6DF;
+}
+
+#log
+{
+	width: 50vw;
 }
 
 #console-toggle-button

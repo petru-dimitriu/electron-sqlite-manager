@@ -3,24 +3,40 @@
 <table id = "columns">
 </table>
 <a class="button" href="javascript:alert(getCreateTableSQLQuery());">Get SQL query</a>
-<a class ="button" href="javascript:executeQuery(getCreateTableSQLQuery())">Create table</a>
+<a class ="button" href="javascript:executeCreateTable()">Create table</a>
 
 <script>
-	$("#numcols").keyup(
+
+$("#numcols").keyup(
+function()
+{
+	var contents = "<tr><th>Name</th><th>Type</th><th>Can be null?</th></tr>";
+	var n = $("#numcols").val();
+	for (i=0;i<n;i++)
+		contents += "<tr><td>" + "<input id=\"name" + i + "\">" + 
+							"</td><td>" + "<select id=\"type" + i + "\">" +
+							"<option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>" + 
+							"</td><td>" + "<input type='checkbox' id=\"null" + i + "\"></td>";
+	$("#columns").html(contents);
+}
+);
+
+$("#numcols").change(function(){$("#numcols").keyup();});
+
+function executeCreateTable()
+{
+	executeQuery(getCreateTableSQLQuery(),
 	function()
 	{
-		var contents = "<tr><th>Name</th><th>Type</th><th>Can be null?</th></tr>";
-		var n = $("#numcols").val();
-		for (i=0;i<n;i++)
-			contents += "<tr><td>" + "<input id=\"name" + i + "\">" + 
-								"</td><td>" + "<select id=\"type" + i + "\">" +
-								"<option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>" + 
-								"</td><td>" + "<input type='checkbox' id=\"null" + i + "\"></td>";
-		$("#columns").html(contents);
-	}
-	);
-	
-	$("#numcols").change(function(){$("#numcols").keyup();});
+		topMessage('Table created successfully.');
+	},
+	function()
+	{
+		topMessage('SQL query failed',3000,null,"red");
+		$("#title").html('Failed to create table');
+		$("#contents").html("Table creation failed, probably due to some characters that shouldn't have been there.<br><br><a href='javascript:createTable()'>Start over</a><br><a href='javascript:listTables()'>View all tables</a>");
+	});
+}
 	
 function getCreateTableSQLQuery()
 {

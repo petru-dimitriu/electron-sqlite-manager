@@ -8,6 +8,7 @@ window.$ = window.jQuery = require('jquery');
 window.onload = function init()
 {
 	out = $("#log");
+	initialTopColor = $("#topbar").css("backgroundColor");
 };
 
 function log(out, text)
@@ -86,7 +87,7 @@ function displayResult(title,query,actions)
 		else
 			contents = "Query returned null result!";
 		
-		contents += "<a href='javascript:listTables()'>View all tables</a>"
+		contents += "<br><a href='javascript:listTables()'>View all tables</a>"
 		$("#contents").html(contents);
 	}
 	
@@ -97,8 +98,10 @@ function displayResult(title,query,actions)
 
 function displayTable(name)
 {
-	var query = "select * from " + name;
-	displayResult("Showing table<br>" + name, query);
+	executeQuery("SELECT * FROM " + name);
+	$("#title").html('Table <i>' + name + '</i>');
+	actions = '<a href="javascript:listTables()">View all tables</a><br><a href="javascript:">Drop this table</a>';
+	$("#actions").html(actions);
 }
 
 function dropTable(name)
@@ -109,15 +112,17 @@ function dropTable(name)
 
 function toggleConsole()
 {
-	var qtheight;
+	
 	if (typeof(qtheight) === "undefined")
 		qtheight = $("#querytext").height() + "px";
+	if (typeof(qtwidth) === "undefined")
+		qtwidth = $("#querytext").width() + "px";
 	
 	if ( $("#console-toggle-button").html() == "Hide")
 	{
-		$("#log").animate({height:"0px"},300);
+		$("#log").animate({height:"0px", width:"50px"},300);
 		$("#console-toggle-button").html("Show");
-		$("#querytext").hide("slide",{},300,function()
+		$("#querytext").animate({height: 0, width:"50px"},300,function()
 			{
 				$("#querytext").hide();
 				$("#log").hide();
@@ -128,16 +133,14 @@ function toggleConsole()
 		$("#querytext").show();
 		$("#log").show();
 		
-		$("#log").animate({height:"20vh"},300);
+		$("#log").animate({height:"20vh", width: "80vw"},300);
 		$("#console-toggle-button").html("Hide");
-		$("#querytext").animate({height:qtheight},300);
+		$("#querytext").animate({height:qtheight, width: "80vw"},300);
 	}
 }
 
-function executeQuery(query)
+function executeQuery(query, funcEndSuccess, funcEndError)
 {
-	if ($("#console-toggle-button").html()=="Show")
-		toggleConsole();
 	if (typeof query === "undefined")
 	{
 		$("#title").html("Console query result");
@@ -146,7 +149,7 @@ function executeQuery(query)
 	else
 		$("#title").html("Query result");
 	
-	log(out,"<b>" + query + "</b>");
+	log(out,"<b>> " + query + "</b>");
 	var iteration = 0;
 	var contents;
 	var ok = 0;
@@ -164,24 +167,42 @@ function executeQuery(query)
 				contents += "<th>" + columnNames[index] + "</th>";
 			contents += "</tr>";
 		}
+		
 		iteration++;
 		contents += "<tr>";
+		
 		for (p in row)
 			contents += "<td>" + row[p] + "</td>";
+		
 		contents += "</tr>";
 	}
 	
 	var parseEnd = function(err)
 	{
+		var success = true;
 		if (err)
+		{
 			log(out,err);
+			success = false;
+			
+			if ($("#console-toggle-button").html()=="Show")
+				toggleConsole();
+		}
 		else
 			log(out,"Query OK!");
+		
 		if (iteration!=0)
 			contents += "</table>";
 		else
 			contents = "Query returned null result!";
+		
 		$("#contents").html(contents);
+		
+		if (success && typeof funcEndSuccess !== "undefined" && funcEndSuccess != null)
+			funcEndSuccess();
+		if (!success && typeof funcEndError !== "undefined" && funcEndError != null)
+			funcEndError();
+		
 	}
 	
 	db.each(query,processRow,parseEnd);
@@ -190,7 +211,7 @@ function executeQuery(query)
 function createTable()
 {
 	$("#title").html("Create table");
-	$("#actions").html("<a href='javascript:listTables();'>View tables</a>");
+	$("#actions").html("<a href='javascript:listTables();'>View all tables</a>");
 	var contents = fs.readFileSync("newtable.html");
 	$("#contents").html(contents.toString());
 }
@@ -206,24 +227,29 @@ function openDialog()
 		});
 }
 
-function successMessage(message, timeout, endFunc)
+function topMessage(message, timeout, endFunc, color)
 {
 	if (typeof timeout === 'undefined')
 		timeout = 3000;
-	var initialColor = $("#topbar").css("backgroundColor");
+	var lastTimeOut;
+	
 	$("#topbar-contents").animate({height:"0"},400);
 	$("#topbar-popup").html(message);
 	$("#topbar-popup").animate({height:"30px"},400);
 	$("#topbar").animate({
-		backgroundColor:"#0f0"
+		backgroundColor:typeof color === "undefined" ? "#0f0" : color
 	},300);
 	
+	if (lastTimeOut != null)
+		clearTimeout(lastTimeOut);
+	
+	lastTimeOut =
 	setTimeout(function(){
-		if (typeof endFunc !== "undefined")
+		if (typeof endFunc !== "undefined" && endFunc != null)
 			endFunc();
 		$("#topbar-contents").animate({height:"30px"},400);
 		$("#topbar").animate({
-		backgroundColor:initialColor
+		backgroundColor:initialTopColor
 	},300);
 		$("#topbar-popup").animate({height:"0px"},400);
 	},timeout);
@@ -235,5 +261,5 @@ function openDB(fileName)
 		db.close();
 	db = new sqlite.Database(fileName);
 	listTables();
-	successMessage('Database opened successfully.',3000,function(){$("#dbname").html(fileName);});
+	topMessage('Database opened successfully.',3000,function(){$("#dbname").html(fileName);});
 }

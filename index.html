@@ -18,7 +18,7 @@
 	</div>
 	<div id="body" onload="init()">
 		<div id="right-body">
-			<h1> Actions </h1>
+			<h1 style="font-size:90%;"> Actions </h1>
 			<div id="actions">
 			<a href="javascript:createTable();">New table</a>
 			</div>
@@ -26,15 +26,15 @@
 		<div id="left-body">
 			<h1 id ="title">SQLite Electron Manager</h1>
 			<p id="contents" style="text-align:center;">Welcome! You may either <a class="big-button" href="javascript:openDialog();">open a database</a> or <a class ="big-button">create a new one</a> from scratch.</p>
-			<div style="position:fixed; bottom:1px; width: 80vw; padding: 5px; border: 1px black solid;">
-				<p>Console <a href="javascript:toggleConsole();" id="console-toggle-button">Hide</a> </p>
-				<form style="border: 1px #aaa solid;" id="console-form">
-				<div id="log" style="overflow: scroll; height:20vh; width:100%; font-family:courier; padding-top:5px; overflow-x:hidden;" readonly></div>
-				<input id="querytext" type="text" placeholder="Type here" style="width:100%; border:none;">
-				<button type="submit" formaction = "javascript:executeQuery();" value="Execute" style="width:20%; display:none;">Execute</button>
-				</form>
-			</div>
 		</div>
+	</div>
+	<div id = "console">
+		<p>Console <a href="javascript:toggleConsole();" id="console-toggle-button">Hide</a> </p>
+		<form style="border: 1px #aaa solid;" id="console-form">
+		<div id="log" style="overflow: scroll; height:20vh; width:80vw; font-family:courier; padding-top:5px; overflow-x:hidden;" readonly></div>
+		<input id="querytext" type="text" placeholder="Type here" style="width:80vw; border:none;">
+		<button type="submit" formaction = "javascript:executeQuery();" value="Execute" style="width:20%; display:none;">Execute</button>
+		</form>
 	</div>
   </body>
 </html>
