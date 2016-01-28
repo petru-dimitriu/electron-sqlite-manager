@@ -42,6 +42,7 @@ function listTables()
 				i++;
 				contents += "<tr><td>" + row.name + "</td><td>" + row.sql + "</td><td>" + 
 				"<a href=\"javascript:displayTable('" + row.name + "')\">Display</a> " +
+				"<a href=\"javascript:alterTable('" + row.name + "')\">Alter</a> " +
 				"<a href=\"javascript:dropTable('" + row.name + "')\">Drop</a></td></tr>";
 			},
 			function()
@@ -98,9 +99,12 @@ function displayResult(title,query,actions)
 
 function displayTable(name)
 {
+	currentTable = name;
 	executeQuery("SELECT * FROM " + name);
 	$("#title").html('Table <i>' + name + '</i>');
-	actions = '<a href="javascript:listTables()">View all tables</a><br><a href="javascript:">Drop this table</a>';
+	actions = '<a href="javascript:listTables()">View all tables</a>' +
+				'<br><a href="javascript:alterTable(\'' + name + '\')">Alter this table</a>' +
+				'<br><a href="javascript:dropTable("' + name + '")">Drop this table</a> ';
 	$("#actions").html(actions);
 }
 
@@ -183,6 +187,7 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 		if (err)
 		{
 			log(out,err);
+			lastErr = err;
 			success = false;
 			
 			if ($("#console-toggle-button").html()=="Show")
@@ -214,6 +219,17 @@ function createTable()
 	$("#actions").html("<a href='javascript:listTables();'>View all tables</a>");
 	var contents = fs.readFileSync("newtable.html");
 	$("#contents").html(contents.toString());
+}
+
+function alterTable(table)
+{
+	currentTable = table;
+	$("#title").html("Altering table <i>" + table + "</li>");
+	$("#actions").html("<a href='javascript:displayTable(\"" + table + "\")'>Display this table</a><br>" +
+					"<a href='javascript:listTables();'>View all tables</a>");
+	var contents = fs.readFileSync("altertable.html");
+	$("#contents").html(contents.toString());
+	$("#tablename").val(table);
 }
 
 function openDialog()
