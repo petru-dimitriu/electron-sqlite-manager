@@ -8,13 +8,13 @@ function executeRenameTable()
 	executeQuery("ALTER TABLE " + currentTable + " RENAME TO " + newName,
 	function()
 	{
-		topMessage('Table renamed successfully.');
+		ST.notify('Table renamed successfully.');
 		currentTable = newName;
 		alterTable(newName);
 	},
 	function()
 	{
-		topMessage('Error occurred while renaming table.',3000,null,"red");
+		ST.notify('Error occurred while renaming table.',3000,null,"red");
 		$("#title").html("Error renaming table");
 		$("#contents").html("<p>" + lastErr + "</p><br><a href='javascript:listTables()'>View all tables</a>");
 	});

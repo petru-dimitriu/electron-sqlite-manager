@@ -32,7 +32,7 @@ function executeCreateTable()
 	},
 	function()
 	{
-		topMessage('SQL query failed',3000,null,"red");
+		ST.notify('SQL query failed',3000,null,"red");
 		$("#title").html('Failed to create table');
 		$("#contents").html("Table creation failed<br><p>" + lastErr + "</p><br><a href='javascript:createTable()'>Start over</a><br><a href='javascript:listTables()'>View all tables</a>");
 	});

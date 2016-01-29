@@ -3,19 +3,12 @@
   <head>
     <meta charset="UTF-8">
 	<link href="style/style.css" rel="stylesheet">
-	<script src="front.js" type="text/javascript"></script>
+	<script src="js/front.js" type="text/javascript"></script>
+	<script src="js/simpleticker.js" type="text/javascript"></script>
     <title>SQLite Manager</title>
   </head>
   <body>
-	<div id="topbar">
-		<div id = "topbar-contents">
-			<a class="inline-link">New DB</a>
-			<a class="inline-link" href="javascript:openDialog();">Open DB</a>
-			<span id="dbname" style="float:right"></span>
-		</div>
-		<div id = "topbar-popup">
-		</div>
-	</div>
+	<div id="topbar"></div>
 	<div id="body" onload="init()">
 		<div id="right-body">
 			<h1 style="font-size:90%;"> Actions </h1>

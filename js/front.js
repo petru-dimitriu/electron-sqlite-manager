@@ -9,6 +9,11 @@ window.onload = function init()
 {
 	out = $("#log");
 	initialTopColor = $("#topbar").css("backgroundColor");
+	ST = Object.create(SimpleTicker);
+	var initialTopBar = `<a class="inline-link">New DB</a>
+			<a class="inline-link" href="javascript:openDialog();">Open DB</a>
+			<span id="dbname" style="float:right"></span>`;
+	ST.init("#topbar",initialTopBar);
 };
 
 function log(out, text)
@@ -91,8 +96,7 @@ function displayResult(title,query,actions)
 		contents += "<br><a href='javascript:listTables()'>View all tables</a>"
 		$("#contents").html(contents);
 	}
-	
-	
+		
 	db.each(query,processRow,parseEnd);
 	
 }
@@ -116,7 +120,6 @@ function dropTable(name)
 
 function toggleConsole()
 {
-	
 	if (typeof(qtheight) === "undefined")
 		qtheight = $("#querytext").height() + "px";
 	if (typeof(qtwidth) === "undefined")
@@ -217,7 +220,7 @@ function createTable()
 {
 	$("#title").html("Create table");
 	$("#actions").html("<a href='javascript:listTables();'>View all tables</a>");
-	var contents = fs.readFileSync("newtable.html");
+	var contents = fs.readFileSync("html/newtable.html");
 	$("#contents").html(contents.toString());
 }
 
@@ -227,7 +230,7 @@ function alterTable(table)
 	$("#title").html("Altering table <i>" + table + "</li>");
 	$("#actions").html("<a href='javascript:displayTable(\"" + table + "\")'>Display this table</a><br>" +
 					"<a href='javascript:listTables();'>View all tables</a>");
-	var contents = fs.readFileSync("altertable.html");
+	var contents = fs.readFileSync("html/altertable.html");
 	$("#contents").html(contents.toString());
 	$("#tablename").val(table);
 }
@@ -243,39 +246,11 @@ function openDialog()
 		});
 }
 
-function topMessage(message, timeout, endFunc, color)
-{
-	if (typeof timeout === 'undefined')
-		timeout = 3000;
-	var lastTimeOut;
-	
-	$("#topbar-contents").animate({height:"0"},400);
-	$("#topbar-popup").html(message);
-	$("#topbar-popup").animate({height:"30px"},400);
-	$("#topbar").animate({
-		backgroundColor:typeof color === "undefined" ? "#0f0" : color
-	},300);
-	
-	if (lastTimeOut != null)
-		clearTimeout(lastTimeOut);
-	
-	lastTimeOut =
-	setTimeout(function(){
-		if (typeof endFunc !== "undefined" && endFunc != null)
-			endFunc();
-		$("#topbar-contents").animate({height:"30px"},400);
-		$("#topbar").animate({
-		backgroundColor:initialTopColor
-	},300);
-		$("#topbar-popup").animate({height:"0px"},400);
-	},timeout);
-}
-
 function openDB(fileName)
 {
 	if (typeof db !== 'undefined')
 		db.close();
 	db = new sqlite.Database(fileName);
 	listTables();
-	topMessage('Database opened successfully.',3000,function(){$("#dbname").html(fileName);});
+	ST.notify('Database opened successfully.',3000,function(){$("#dbname").html(fileName);});
 }
