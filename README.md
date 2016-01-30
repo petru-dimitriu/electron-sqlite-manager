@@ -1,5 +1,13 @@
-# Electron-based SQLite database manager
+# SQLite database manager built around Electron
 
-Do note, though, that due to current SQLite3 & Electron.js compatibility issues, installing the app is particularly tricky. `npm install` currently is *not* enough for it to work. To be continued.
+## Overview
+A fairly simple and straightforward manager for SQLite3 databases, which:
+* opens databases
+* creates, displays and alters tables
+* has a built-in SQL console
+* only uses JQuery & JQuery-UI as extra requisites
 
-TODO: Write readme
+## Installing
+Due to current SQLite3 & Electron.js compatibility issues, installing the app via a plain `npm install` command is currently *not* enough for it to work. 
+
+For Windows x64 builds, I have included a batch file, `install.bat`, which can be run to get everything set up. Be sure to tweak it, if necessary.
