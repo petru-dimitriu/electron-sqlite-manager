@@ -2,11 +2,13 @@
 <a href="javascript:executeRenameTable()">Rename</a></p>
 <p>Add column:<br>
 <input id="columnname" type="text" placeholder="Column name">
-<select id="columntype"><option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select> 
-<a href="javascript:executeAddColumn()">Add column</a></p>
+<select id="columntype"><option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>
+<input type='checkbox' id="columnnull">Can be NULL?</input> 
+<a href="javascript:executeAddColumn();">Add column</a></p>
 </p>
 
 <script>
+
 function executeRenameTable()
 {
 	var newName = $("#tablename").val();
@@ -19,7 +21,7 @@ function executeRenameTable()
 	},
 	function()
 	{
-		ST.notify('Error occurred while renaming table.',3000,null,"red");
+		ST.notify('Error occurred while renaming the table.',3000,null,"red");
 		$("#title").html("Error renaming table");
 		$("#contents").html("<p>" + lastErr + "</p><br><a href='javascript:listTables()'>View all tables</a>");
 	});
@@ -27,18 +29,19 @@ function executeRenameTable()
 
 function executeAddColumn()
 {
-	var newName = $("#tablename").val();
-	executeQuery("ALTER TABLE ADD COLUMN" + currentTable + " RENAME TO " + newName,
+	var columnname = $("#columnname").val();
+	var columntype = $("#columntype").val();
+	var columnnull = ($("#columnnull").is(":checked"))?" NULL":" NOT NULL";
+	executeQuery("ALTER TABLE " + currentTable + " ADD COLUMN " +  columnname + " " + columntype + " " + columnnull,
 	function()
 	{
-		ST.notify('Table renamed successfully.');
-		currentTable = newName;
+		ST.notify('Table altered successfully.');
 		alterTable(newName);
 	},
 	function()
 	{
-		ST.notify('Error occurred while renaming table.',3000,null,"red");
-		$("#title").html("Error renaming table");
+		ST.notify('Error occurred while altering the table.',3000,null,"red");
+		$("#title").html("Error altering table");
 		$("#contents").html("<p>" + lastErr + "</p><br><a href='javascript:listTables()'>View all tables</a>");
 	});
 }
