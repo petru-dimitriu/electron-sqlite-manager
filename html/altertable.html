@@ -1,11 +1,34 @@
-<p>Rename table:<br><input id = "tablename" type="text" style="width:100%;">
+<p>Rename table:<br><input id = "tablename" type="text">
 <a href="javascript:executeRenameTable()">Rename</a></p>
+<p>Add column:<br>
+<input id="columnname" type="text" placeholder="Column name">
+<select id="columntype"><option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select> 
+<a href="javascript:executeAddColumn()">Add column</a></p>
+</p>
 
 <script>
 function executeRenameTable()
 {
 	var newName = $("#tablename").val();
 	executeQuery("ALTER TABLE " + currentTable + " RENAME TO " + newName,
+	function()
+	{
+		ST.notify('Table renamed successfully.');
+		currentTable = newName;
+		alterTable(newName);
+	},
+	function()
+	{
+		ST.notify('Error occurred while renaming table.',3000,null,"red");
+		$("#title").html("Error renaming table");
+		$("#contents").html("<p>" + lastErr + "</p><br><a href='javascript:listTables()'>View all tables</a>");
+	});
+}
+
+function executeAddColumn()
+{
+	var newName = $("#tablename").val();
+	executeQuery("ALTER TABLE ADD COLUMN" + currentTable + " RENAME TO " + newName,
 	function()
 	{
 		ST.notify('Table renamed successfully.');

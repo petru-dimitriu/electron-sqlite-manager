@@ -13,6 +13,7 @@ SimpleTicker = {
 		
 		var inner = `<div id = "ticker-contents"> ` + initialContent + `</div><div id = "ticker-contents2"></div>`;
 		$(container).html(inner);
+		$(container).css("overflow","hidden");
 		
 		this.container = $(container);
 		this.contents = this.container.children("#ticker-contents");
@@ -21,11 +22,6 @@ SimpleTicker = {
 		this.initialBgColor = this.container.css("backgroundColor");
 		this.speed = 400;
 		this.lastTimeOut = 0;
-	},
-	
-	setSpeed: function (newSpeed)
-	{
-		this.speed = newSpeed;
 	},
 	
 	popup : function (message, color)
@@ -41,12 +37,12 @@ SimpleTicker = {
 		my.container.animate({ backgroundColor:typeof color === "undefined" ? "#0f0" : color },my.speed);
 	},
 	
-	popdown : function ()
+	popdown : function (endFunc)
 	{
 		if (typeof endFunc !== "undefined" && endFunc != null)
 			endFunc();
 		my.contents.animate({height:"30px"},my.speed);
-		my.container.animate({backgroundColor:initialTopColor },my.speed);
+		my.container.animate({backgroundColor:my.initialBgColor },my.speed);
 		my.contents2.animate({height:"0px"},my.speed);
 		my.lastTimeOut = 0;
 	},
@@ -70,12 +66,26 @@ SimpleTicker = {
 		if (my.lastTimeOut != 0)
 			clearTimeout(my.lastTimeOut);
 		
-		my.lastTimeOut =
-		setTimeout(function(){my.popdown();},timeout);
+		my.lastTimeOut = setTimeout(function(){my.popdown(endFunc);},timeout);
 	},
 	
-	showThis : function()
+	getMainContents : function()
 	{
-		console.log (this);
+		return this.container.html();
+	},
+	
+	setMainContents : function(contents)
+	{
+		this.container.html(contents);
+	},
+	
+	setSpeed: function (newSpeed)
+	{
+		this.speed = newSpeed;
+	},
+	
+	getSpeed: function ()
+	{
+		return this.speed;
 	}
 }

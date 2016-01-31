@@ -6,7 +6,6 @@
 <a class ="button" href="javascript:executeCreateTable()">Create table</a>
 
 <script>
-
 $("#numcols").keyup(
 function()
 {
@@ -16,7 +15,7 @@ function()
 		contents += "<tr><td>" + "<input id=\"name" + i + "\">" + 
 							"</td><td>" + "<select id=\"type" + i + "\">" +
 							"<option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>" + 
-							"</td><td>" + "<input type='checkbox' id=\"null" + i + "\"></td>";
+							"</td><td>" + "<input type='checkbox' id=\"null" + i + "\"><label for='null" + i + "' ></label></td>";
 	$("#columns").html(contents);
 }
 );

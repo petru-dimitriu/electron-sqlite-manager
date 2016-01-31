@@ -10,7 +10,7 @@ window.onload = function init()
 	out = $("#log");
 	initialTopColor = $("#topbar").css("backgroundColor");
 	ST = Object.create(SimpleTicker);
-	var initialTopBar = `<a class="inline-link">New DB</a>
+	var initialTopBar = `<a class="inline-link" href="javascript:newDialog();">New DB</a>
 			<a class="inline-link" href="javascript:openDialog();">Open DB</a>
 			<span id="dbname" style="float:right"></span>`;
 	ST.init("#topbar",initialTopBar);
@@ -114,7 +114,7 @@ function displayTable(name)
 
 function dropTable(name)
 {
-	db.exec("drop table " + name);
+	executeQuery("DROP TABLE " + name);
 	listTables();
 }
 
@@ -240,9 +240,33 @@ function openDialog()
 	dialog.showOpenDialog(
 		function(fileNames)
 		{
-			if (fileNames === undefined)
+			if (typeof fileNames === 'undefined')
 				return;
 			openDB(fileNames[0]);
+		});
+}
+
+function newDialog()
+{
+	dialog.showSaveDialog(
+		function(fileName)
+		{
+			if (typeof fileName === 'undefined')
+				return;
+			$("#title").html("In progress")
+			$("#contents").html("<p>Creating database...</p>");
+			db = new sqlite.Database(fileName);
+			if (db)
+			{
+				shortDBName = fileName.substring(fileName.lastIndexOf('\\')+1);
+				ST.notify("Database <b>" + shortDBName + "</b> successfully created." );
+				listTables();
+			}
+			else
+			{
+				ST.notify("Error creating database!",3000,"red");
+				$("#contents").append("<p class='error'>Error creating database.</p>");
+			}
 		});
 }
 
@@ -251,6 +275,7 @@ function openDB(fileName)
 	if (typeof db !== 'undefined')
 		db.close();
 	db = new sqlite.Database(fileName);
+	shortDBName = fileName.substring(fileName.lastIndexOf('\\')+1);
 	listTables();
-	ST.notify('Database opened successfully.',3000,function(){$("#dbname").html(fileName);});
+	ST.notify('Database <b>' + shortDBName + '</b> opened successfully.',3000,function(){$("#dbname").html(shortDBName);});
 }
