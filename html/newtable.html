@@ -9,13 +9,15 @@
 $("#numcols").keyup(
 function()
 {
-	var contents = "<tr><th>Name</th><th>Type</th><th>Can be null?</th></tr>";
+	var contents = "<tr><th>Name</th>\<th>Type</th><th>Default value</th><th>Null?</th><th>Primary?</th><th>Autoinc?</th></tr>";
 	var n = $("#numcols").val();
 	for (i=0;i<n;i++)
-		contents += "<tr><td>" + "<input id=\"name" + i + "\">" + 
-							"</td><td>" + "<select id=\"type" + i + "\">" +
-							"<option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>" + 
-							"</td><td>" + "<input type='checkbox' id=\"null" + i + "\"><label for='null" + i + "' ></label></td>";
+		contents += '<tr><td><input id="name' + i + '"\></td>' +
+					'<td><select id="type' + i + '"><option>INTEGER</option> <option>REAL</option> <option>TEXT</option> <option>BLOB</option> </select></td>' +
+					'<td><input id = "defaultval' + i + '"></td>' +
+					'<td><input type="checkbox" id="null'+ i +'"></td>' +
+					'<td><input type="checkbox" id="primary' + i + '"></td>' +
+					'<td><input type="checkbox" id="autoinc' + i + '"></td>';
 	$("#columns").html(contents);
 }
 );
@@ -24,10 +26,14 @@ $("#numcols").change(function(){$("#numcols").keyup();});
 
 function executeCreateTable()
 {
-	executeQuery(getCreateTableSQLQuery(),
+	var query = getCreateTableSQLQuery();
+	if (query != 0)
+	executeQuery(query,
 	function()
 	{
-		topMessage('Table created successfully.');
+		ST.notify('Table created successfully.');
+		$("#title").html("Table created successfully.");
+		$("#contents").html("<a href='javascript:displayTable(tableName);'>View table</a>")
 	},
 	function()
 	{
@@ -40,15 +46,22 @@ function executeCreateTable()
 function getCreateTableSQLQuery()
 {
 	var numColumns = $("#numcols").val();
-	var query = "CREATE TABLE " + $("#tablename").val() + "(";
+	tableName = $("#tablename").val();
+	var query = "CREATE TABLE " + tableName + "(";
 	for (var i=0;i<numColumns;i++)
 	{
 		if ($("#name"+i).val() == "")
 		{
 			alert('Column ' + i + ' has no name specified!');
-			return;
+			return 0;
 		}
-		query = query + $("#name" + i).val() +" "+ $("#type" + i).val() + (($("#null" + i).is(":checked"))?" NULL":" NOT NULL") + ((i==numColumns-1?"":","));
+		var needsApostrophe = $("#type"+i).prop('selectedIndex') > 1;
+		query = query + $("#name" + i).val() + " "+ $("#type" + i).val() + 
+		(($("#null" + i).is(":checked"))?" NULL":" NOT NULL") + 
+		(($("#primary" + i).is(":checked"))?" PRIMARY KEY":"") + 
+		(($("#autoinc" + i).is(":checked"))?" AUTOINCREMENT":"") + 
+		($("#defaultval" + i).val()!='' ? " DEFAULT " + (needsApostrophe? "'" : "") + $("#defaultval" + i).val() + (needsApostrophe? "'" : "") : "") +
+		((i==numColumns-1?"":","));
 	}
 	query = query + ")";
 	return query;

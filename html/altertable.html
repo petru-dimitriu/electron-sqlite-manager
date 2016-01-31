@@ -1,9 +1,11 @@
 <p>Rename table:<br><input id = "tablename" type="text">
 <a href="javascript:executeRenameTable()">Rename</a></p>
 <p>Add column:<br>
-<input id="columnname" type="text" placeholder="Column name">
-<select id="columntype"><option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>
-<input type='checkbox' id="columnnull">Can be NULL?</input> 
+<input id="columnname" type="text" placeholder="Column name"><br>
+<select id="columntype"><option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select><br>
+<input type='checkbox' id="columnnull">NULL?</input><br>
+<input id="columndefault"><br>
+<input type='checkbox' id="columautoinc">Autoinc?</input> <br>
 <a href="javascript:executeAddColumn();">Add column</a></p>
 </p>
 
@@ -32,7 +34,12 @@ function executeAddColumn()
 	var columnname = $("#columnname").val();
 	var columntype = $("#columntype").val();
 	var columnnull = ($("#columnnull").is(":checked"))?" NULL":" NOT NULL";
-	executeQuery("ALTER TABLE " + currentTable + " ADD COLUMN " +  columnname + " " + columntype + " " + columnnull,
+	var columnautoinc = ($("#columnautoinc").is(":checked"))?"AUTOINCREMENT":"";
+	var needsApostrophe = $("#columntype").prop('selectedIndex') > 1;
+	var defaultVal = $("#columndefault").val();
+	var columndefault = (defaultVal ? ("DEFAULT " + (needsApostrophe?"'":"") + defaultVal + (needsApostrophe? "'":"")) : "");
+	
+	executeQuery("ALTER TABLE " + currentTable + " ADD COLUMN " +  columnname + " " + columntype + " " + columnnull + " " + columnautoinc + " " + columndefault,
 	function()
 	{
 		ST.notify('Table altered successfully.');
