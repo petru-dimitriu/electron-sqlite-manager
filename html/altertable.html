@@ -1,12 +1,14 @@
-<p>Rename table:<br><input id = "tablename" type="text">
-<a href="javascript:executeRenameTable()">Rename</a></p>
-<p>Add column:<br>
-<input id="columnname" type="text" placeholder="Column name"><br>
-<select id="columntype"><option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select><br>
-<input type='checkbox' id="columnnull">NULL?</input><br>
-<input id="columndefault"><br>
-<input type='checkbox' id="columautoinc">Autoinc?</input> <br>
-<a href="javascript:executeAddColumn();">Add column</a></p>
+<h2>Rename table</h2>
+<p><input id = "tablename" type="text">
+<a class="button" href="javascript:executeRenameTable()">Rename</a></p>
+<h2>Add column</h2>
+<p>
+<input id="columnname" type="text" placeholder="Column name">
+<select id="columntype"><option>INTEGER</option><option>REAL</option><option>TEXT</option><option>BLOB</option></select>
+<input type='checkbox' id="columnnull">NULL?</input>
+<input id="columndefault" placeholder="Default value">
+<input type='checkbox' id="columautoinc">Autoinc?</input>
+<a href="javascript:executeAddColumn();" class="button">Add column</a></p>
 </p>
 
 <script>

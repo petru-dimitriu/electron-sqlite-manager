@@ -83,8 +83,9 @@ input
 
 #body h2
 {
+	text-align:left;
 	margin: 0px 0px 5px 5px;
-	font-size: 180%;
+	font-size: 120%;
 	font-family: PTSans	;
 }
 
@@ -159,7 +160,7 @@ td:nth-child(3n+0)
 	display:block;
 	padding: 5px;
 	margin: 5px 0 5px 0;
-	color:white;
+	color:black;
 	font-size:90%;
 	border: 1px #0a0a0f solid;
 	text-align:center;
