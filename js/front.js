@@ -146,6 +146,19 @@ function toggleConsole()
 	}
 }
 
+function incrementalSearch()
+{
+	var searchval = $("#incsearch").val();
+	for (var i=1;i<=queryRows;i++)
+	{
+		if ($("#row" + i).text().search(searchval) == -1)
+			$("#row"+i).css("display","none");
+		else
+			$("#row"+i).css("display","table-row");
+	}
+	
+}
+
 function executeQuery(query, funcEndSuccess, funcEndError)
 {
 	if (typeof query === "undefined")
@@ -157,7 +170,7 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 		$("#title").html("Query result");
 	
 	log(out,"<b>> " + query + "</b>");
-	var iteration = 0;
+	queryRows = 0;
 	var contents;
 	var ok = 0;
 	
@@ -165,7 +178,7 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 	
 	var processRow = function (err,row)
 	{
-		if (iteration==0)
+		if (queryRows==0)
 		{
 			ok = 1;
 			contents = "<table style=\"width:100%\">";
@@ -173,10 +186,11 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 			for (index in columnNames)
 				contents += "<th>" + columnNames[index] + "</th>";
 			contents += "</tr>";
+			contents += "<tr><td colspan=\"50\"><input style='width:100%' placeholder='Incremental search through all columns' id='incsearch'/></td></tr>";
 		}
 		
-		iteration++;
-		contents += "<tr>";
+		queryRows++;
+		contents += "<tr id='row" + queryRows + "'>";
 		
 		for (p in row)
 			contents += "<td>" + row[p] + "</td>";
@@ -199,12 +213,14 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 		else
 			log(out,"Query OK!");
 		
-		if (iteration!=0)
+		if (queryRows!=0)
 			contents += "</table>";
 		else
 			contents = "Query returned null result!";
 		
 		$("#contents").html(contents);
+		$("#incsearch").unbind();
+		$("#incsearch").keyup(incrementalSearch);
 		
 		if (success && typeof funcEndSuccess !== "undefined" && funcEndSuccess != null)
 			funcEndSuccess();
