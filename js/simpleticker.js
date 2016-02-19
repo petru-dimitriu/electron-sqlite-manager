@@ -39,7 +39,7 @@ SimpleTicker = {
 	
 	popdown : function (endFunc)
 	{
-		if (typeof endFunc !== "undefined" && endFunc != null)
+		if (typeof endFunc !== "undefined" && endFunc !== null)
 			endFunc();
 		my.contents.animate({height:"30px"},my.speed);
 		my.container.animate({backgroundColor:my.initialBgColor },my.speed);

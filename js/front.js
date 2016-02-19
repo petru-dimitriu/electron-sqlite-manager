@@ -170,6 +170,11 @@ function incrementalSearch()
 
 function executeQuery(query, funcEndSuccess, funcEndError)
 {
+	if (typeof db === "undefined")
+	{
+		ST.notify("Query not executed. No open database!",5000,null,"red");
+		return;
+	}
 	if (typeof query === "undefined")
 	{
 		$("#title").html("Console query result");
@@ -301,7 +306,7 @@ function newDialog()
 			}
 			else
 			{
-				ST.notify("Error creating database!",3000,"red");
+				ST.notify("Error creating database!",3000,null,"red");
 				$("#contents").append("<p class='error'>Error creating database.</p>");
 			}
 		});
