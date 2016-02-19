@@ -14,6 +14,7 @@ window.onload = function init()
 			<a class="inline-link" href="javascript:openDialog();">Open DB</a>
 			<span id="dbname" style="float:right"></span>`;
 	ST.init("#topbar",initialTopBar);
+	
 };
 
 function log(out, text)
@@ -70,7 +71,9 @@ function displayResult(title,query,actions)
 	var processRow = function (err,row)
 	{
 		if (err)
+		{
 			return;
+		}
 		if (iteration==0)
 		{
 			contents = "<table style=\"width:100%\">";
@@ -105,8 +108,9 @@ function displayTable(name)
 {
 	currentTable = name;
 	executeQuery("SELECT * FROM " + name);
-	$("#title").html('Table <i>' + name + '</i>');
-	actions = '<a href="javascript:listTables()">View all tables</a>' +
+	$("#title").html('<span style="display:block; text-align:center; font-size:115%;">' + name + '</span></i>');
+	actions = ' <a href="javascript:focusIncrementalSearch()">Incremental search</a>' + 
+				'<br><a href="javascript:listTables()">View all tables</a>' +
 				'<br><a href="javascript:alterTable(\'' + name + '\')">Alter this table</a>' +
 				'<br><a href="javascript:dropTable("' + name + '")">Drop this table</a> ';
 	$("#actions").html(actions);
@@ -144,6 +148,11 @@ function toggleConsole()
 		$("#console-toggle-button").html("Hide");
 		$("#querytext").animate({height:qtheight, width: "80vw"},300);
 	}
+}
+
+function focusIncrementalSearch()
+{
+	$("#incsearch").triggerHandler( "focus" );
 }
 
 function incrementalSearch()
@@ -186,7 +195,7 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 			for (index in columnNames)
 				contents += "<th>" + columnNames[index] + "</th>";
 			contents += "</tr>";
-			contents += "<tr><td colspan=\"50\"><input style='width:100%' placeholder='Incremental search through all columns' id='incsearch'/></td></tr>";
+			contents += "<tr><td colspan=\"50\"><input placeholder='Incremental search through all columns' id='incsearch'/></td></tr>";
 		}
 		
 		queryRows++;
@@ -214,13 +223,25 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 			log(out,"Query OK!");
 		
 		if (queryRows!=0)
+		{
 			contents += "</table>";
+			$("#contents").html(contents);
+			$("#incsearch").unbind();
+			$("#incsearch").keyup(incrementalSearch);
+			$("#incsearch").focus(function(){
+				$("#incsearch").css("display","block");
+				$("#incsearch").focus();
+			});
+			$("#incsearch").focusout(function(){
+				$("#incsearch").css("display","none");
+			});
+		}
 		else
+		{
 			contents = "Query returned null result!";
-		
-		$("#contents").html(contents);
-		$("#incsearch").unbind();
-		$("#incsearch").keyup(incrementalSearch);
+			$("#contents").html(contents);
+			$("#actions").html("<a href='javascript:listTables();'>Display all tables</a>");
+		}
 		
 		if (success && typeof funcEndSuccess !== "undefined" && funcEndSuccess != null)
 			funcEndSuccess();

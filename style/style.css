@@ -81,6 +81,17 @@ input
 	font-family:PTSans;
 }
 
+#incsearch
+{
+	width:100%;
+	display:none;
+}
+
+#incsearch:focus
+{
+	display:block;
+}
+
 #body h2
 {
 	text-align:left;

@@ -1,5 +1,5 @@
-npm install
-cd node_modules/sqlite3
+call npm install
+call cd node_modules/sqlite3
 call npm install nan@~2.1.0
 call npm run prepublish
 call node-gyp configure --module_name=node_sqlite3 --module_path=../lib/binding/node-v46-win32-x64
