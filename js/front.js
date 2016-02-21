@@ -109,7 +109,8 @@ function displayTable(name)
 	currentTable = name;
 	executeQuery("SELECT * FROM " + name);
 	$("#title").html('<span style="display:block; text-align:center; font-size:115%;">' + name + '</span></i>');
-	actions = ' <a href="javascript:focusIncrementalSearch()">Incremental search</a>' + 
+	actions = '<a href="javascript:insertIntoTable()">Insert into this table</a>' + 
+				' <a href="javascript:focusIncrementalSearch()">Incremental search</a>' + 
 				'<br><a href="javascript:listTables()">View all tables</a>' +
 				'<br><a href="javascript:alterTable(\'' + name + '\')">Alter this table</a>' +
 				'<br><a href="javascript:dropTable("' + name + '")">Drop this table</a> ';
@@ -165,6 +166,56 @@ function incrementalSearch()
 		else
 			$("#row"+i).css("display","table-row");
 	}
+}
+
+function insertIntoTable()
+{
+	if ($("#insertRow").css("display")!="none")
+	{
+		ST.popdown();
+		$("#insertRow").css("display","none");
+		return;
+	}
+	ST.popup("<b>Inserting into table | </b> Complete the desired values and press Enter.","white");
+	$("#insertRow").css("display","table-row");
+	$("#addColumn0").focus();
+	$("[id^=addColumn]").unbind();
+	$("[id^=addColumn]").keyup(
+	function (data)
+	{
+		var i = 0, l = columnNames.length;
+		var dataArray = [];
+		if (data.which==13)
+		{
+			var query = "INSERT INTO " + currentTable + " VALUES (";
+			for (i=0;i<l-1;i++)
+			{
+				query += "?" + ", ";
+				dataArray[i] = $("#addColumn"+i).val();
+			}
+			query += "?)";
+			dataArray[i] = $("#addColumn"+i).val();
+			console.log("addColumn"+i);
+			db.run(query,dataArray,function(err){
+				if (err)
+				{
+					ST.notify("Error adding new row: " + err, 5000, null, "red");
+				}
+				else
+				{
+					ST.notify("New row successfully added.");
+					$("[id^=addColumn]").val('');
+					$("[id=addColumn0]").focus();
+					var newRow = "<tr>"
+					for (i=0;i<l;i++)
+						newRow += "<td>" + dataArray[i] + "</td>";
+					newRow += "</tr>";
+					$("[id=resultTable]").append(newRow);
+				}
+			});
+		}
+		
+	})
 	
 }
 
@@ -195,12 +246,19 @@ function executeQuery(query, funcEndSuccess, funcEndError)
 		if (queryRows==0)
 		{
 			ok = 1;
-			contents = "<table style=\"width:100%\">";
+			contents = "<table style=\"width:100%\" id='resultTable'>";
 			columnNames = Object.keys(row);
+			addRow = "<tr id='insertRow'>";
+			var i = 0;
 			for (index in columnNames)
+			{
 				contents += "<th>" + columnNames[index] + "</th>";
+				addRow += '<td><input id="addColumn' + i + '" style="width:100%"/></td>';
+				i++;
+			}
+			addRow += "</tr>";
 			contents += "</tr>";
-			contents += "<tr><td colspan=\"50\"><input placeholder='Incremental search through all columns' id='incsearch'/></td></tr>";
+			contents += addRow + "<tr><td colspan=\"50\"><input placeholder='Incremental search through all columns' style='width:99%' id='incsearch'/></td></tr>";
 		}
 		
 		queryRows++;

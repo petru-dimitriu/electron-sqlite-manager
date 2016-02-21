@@ -81,7 +81,7 @@ input
 	font-family:PTSans;
 }
 
-#incsearch
+#incsearch, #insertRow
 {
 	width:100%;
 	display:none;
@@ -89,7 +89,7 @@ input
 
 #incsearch:focus
 {
-	display:block;
+	display:table-row;
 }
 
 #body h2
