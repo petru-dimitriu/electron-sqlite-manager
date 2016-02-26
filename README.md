@@ -8,6 +8,10 @@ A fairly simple and straightforward manager for SQLite3 databases, which:
 * has a built-in SQL console
 * only uses JQuery & JQuery-UI as extra requisites
 
+## Screenshots
+![Electron SQLite manager](https://raw.githubusercontent.com/petru-dimitriu/electron-sqlite-manager/master/screen/screen1.png)
+![Electron SQLite manager](https://raw.githubusercontent.com/petru-dimitriu/electron-sqlite-manager/master/screen/screen2.png)
+
 ## Installing
 Due to current SQLite3 & Electron.js compatibility issues, installing the app via a plain `npm install` command is currently *not* enough for it to work. 
 
