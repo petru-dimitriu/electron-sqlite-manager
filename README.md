@@ -9,7 +9,7 @@ A fairly simple and straightforward manager for SQLite3 databases, which:
 * only uses JQuery & JQuery-UI as extra requisites
 
 ## Screenshots
-![Electron SQLite manager](https://raw.githubusercontent.com/petru-dimitriu/electron-sqlite-manager/master/screen/screen1.png)
+![Electron SQLite manager](https://raw.githubusercontent.com/petru-dimitriu/electron-sqlite-manager/master/screen/screen1.PNG)
 ![Electron SQLite manager](https://raw.githubusercontent.com/petru-dimitriu/electron-sqlite-manager/master/screen/screen2.png)
 
 ## Installing
