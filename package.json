@@ -4,7 +4,8 @@
   "description": "SQLite3 database manager based on Electron",
   "main": "main.js",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron main.js",
+    "postinstall": "install-app-deps"
   },
   "repository": {
     "type": "git"
@@ -18,12 +19,12 @@
   "author": "Petru Dimitriu",
   "license": "Public Domain",
   "devDependencies": {
+    "electron-builder": "^17.0.1",
     "electron-prebuilt": "^0.35.0"
   },
-  "dependencies" :
-  {
-	"sqlite3": "~3.1.1",
-	"jquery" :"~2.2.0",
-	"jquery-ui": "~1.10.5"
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "jquery-ui": "~1.10.5",
+    "sqlite3": "^3.1.8"
   }
 }

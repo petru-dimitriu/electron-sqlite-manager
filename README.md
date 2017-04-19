@@ -13,6 +13,4 @@ A fairly simple and straightforward manager for SQLite3 databases, which:
 ![Electron SQLite manager](https://raw.githubusercontent.com/petru-dimitriu/electron-sqlite-manager/master/screen/screen2.png)
 
 ## Installing
-Due to current SQLite3 & Electron.js compatibility issues, installing the app via a plain `npm install` command is currently *not* enough for it to work. 
-
-For Windows x64 builds, I have included a batch file, `install.bat`, which can be run to get everything set up. Be sure to tweak it, if necessary.
+` npm install ` *should* now be enough.
